@@ -9,6 +9,7 @@ wechat_key = os.environ["WECHAT_KEY"]
 token = os.environ["TOKEN"]
 chat_id = os.environ["CHAT_ID"]
 form_data = os.environ["FORM"]
+home_form_data = os.environ["HOME_FORM"]
 
 def bot_post(text):
     if wechat_key != "":
@@ -48,10 +49,31 @@ def fillForm(res):
     return r
 
 
-def main():
+def fillHomeForm(res):
+    s = requests.session()
+    headers = {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'Referer': 'https://app.buaa.edu.cn/site/buaaStudentNcov/index',
+        'X-Requested-With': 'XMLHttpRequest',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cookie': res.headers['set-cookie']
+    }
+    r = s.post('https://app.buaa.edu.cn/buaaxsncov/wap/default/save', data=home_form_data, headers=headers)
+    return r
+
+
+def school():
     result = fillForm(buaaLogin(your_name, your_pwd))
     print(result.text)
     bot_post(result.text)
     return("DONE")
 
-main()
+def home():
+    result = fillHomeForm(buaaLogin(your_name, your_pwd))
+    print(result.text)
+    bot_post(result.text)
+    return("DONE")
+
+school()
+home()
