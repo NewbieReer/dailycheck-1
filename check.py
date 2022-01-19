@@ -75,5 +75,5 @@ def home():
     bot_post(result.text)
     return("DONE")
 
-school()
+# school()
 home()
